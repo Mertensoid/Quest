@@ -88,6 +88,7 @@ func Action(player *Player, world *map[int]Location, people *map[int]Npc, quests
 	fmt.Println("-----------------------------------------------------")
 	showStats(player)
 	fmt.Println("-----------------------------------------------------")
+	showCurrentLocationInfo(player, world)
 	fmt.Println("Какое действие вы хотите совершить?")
 	for index, value := range (*world)[player.currentLocation].Actions {
 		fmt.Print(index+1, ". ", value)
