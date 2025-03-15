@@ -57,10 +57,6 @@ func main() {
 	}
 
 	for {
-		// fmt.Print("\033[H\033[2J")
-		// fmt.Println("-----------------------------------------------------")
-		// showStats(&player)
-		// fmt.Println("-----------------------------------------------------")
 		Action(&player, &World, &People, &Quests, &goods)
 		if player.currentHealth <= 0 {
 			fmt.Println("Вы погибли... Попробуйте заного!")
