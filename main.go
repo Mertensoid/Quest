@@ -56,11 +56,13 @@ func main() {
 		"Тапочки": 2,
 	}
 
+	// fmt.Print("\033[H\033[2J")
+	// fmt.Println("-----------------------------------------------------")
+	// showStats(&player)
+	// fmt.Println("-----------------------------------------------------")
+	// showCurrentLocationInfo(&player, &World)
+
 	for {
-		fmt.Print("\033[H\033[2J")
-		fmt.Println("-----------------------------------------------------")
-		showStats(&player)
-		fmt.Println("-----------------------------------------------------")
 		Action(&player, &World, &People, &Quests, &goods)
 		if player.currentHealth <= 0 {
 			fmt.Println("Вы погибли... Попробуйте заного!")
@@ -80,4 +82,19 @@ func showStats(player *Player) {
 	fmt.Printf("Нагрудник: %s\n", player.currentChest.Name)
 	fmt.Printf("Обувь: %s\n", player.currentBoots.Name)
 	fmt.Printf("Золото: %d\n", player.coins)
+}
+
+func showCurrentLocationInfo(player *Player, world *map[int]Location) {
+
+	fmt.Printf("Вы находитесь в локации %s\n", (*world)[player.currentLocation].Name)
+
+	if player.currentLocation > 0 {
+
+		fmt.Printf("Вы видите, что на локации присутствуют:\n")
+		for _, value := range (*world)[player.currentLocation].Monsters {
+			fmt.Printf("%s (Атака: %d. Здоровье: %d)", value.Name, value.Attack, value.MaxHealth)
+			fmt.Println()
+		}
+	}
+	fmt.Println("-----------------------------------------------------")
 }
