@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 type Location struct {
 	Name        string
@@ -43,7 +46,7 @@ func MakeWorld(world *map[int]Location) {
 		Name:        "Логово тролля",
 		Connections: []int{2},
 		Monsters: map[int]Monster{
-			0: {Name: "Тролль", MaxHealth: 27, Attack: 4},
+			0: {Name: "Тролль", MaxHealth: 27, Attack: 3},
 		},
 		Actions: []string{"Атаковать", "Перейти в другую локацию"},
 	}
@@ -84,11 +87,7 @@ func MakeWorld(world *map[int]Location) {
 }
 
 func Action(player *Player, world *map[int]Location, people *map[int]Npc, quests *map[int]Quest, goods *map[string]int) {
-	fmt.Print("\033[H\033[2J")
-	fmt.Println("-----------------------------------------------------")
-	showStats(player)
-	fmt.Println("-----------------------------------------------------")
-	showCurrentLocationInfo(player, world)
+
 	fmt.Println("Какое действие вы хотите совершить?")
 	for index, value := range (*world)[player.currentLocation].Actions {
 		fmt.Print(index+1, ". ", value)
@@ -128,8 +127,8 @@ func chooseEnemy(player *Player, world *map[int]Location, quests *map[int]Quest)
 }
 
 func fight(player *Player, monster *Monster, quests *map[int]Quest) {
-	turnsToKillMonster := int(monster.MaxHealth / player.currentAttack)
-	turnsToKillPlayer := int(player.currentHealth / monster.Attack)
+	turnsToKillMonster := int(math.Ceil(float64(monster.MaxHealth / player.currentAttack)))
+	turnsToKillPlayer := int(math.Ceil(float64(player.currentHealth / monster.Attack)))
 	if turnsToKillMonster < turnsToKillPlayer {
 		player.currentHealth -= turnsToKillMonster * monster.Attack
 		fmt.Println("Вы победили! У Вас ", player.currentHealth, "очков здоровья")
@@ -241,7 +240,12 @@ func Walk(player *Player, world *map[int]Location) {
 
 func WalkDescriptor(answer int, player *Player, world *map[int]Location) {
 	player.currentLocation = (*world)[player.currentLocation].Connections[answer-1]
-	fmt.Println("Вы перешли в локацию", (*world)[player.currentLocation].Name)
+	fmt.Print("\033[H\033[2J")
+	fmt.Println("-----------------------------------------------------")
+	showStats(player)
+	fmt.Println("-----------------------------------------------------")
+	showCurrentLocationInfo(player, world)
+	//fmt.Println("Вы перешли в локацию", (*world)[player.currentLocation].Name)
 }
 
 //0 Деревня
